@@ -44,6 +44,7 @@ import com.bulq.bulq_commerce.payload.auth.VerificationDTO;
 import com.bulq.bulq_commerce.services.AccountService;
 import com.bulq.bulq_commerce.services.EmailService;
 import com.bulq.bulq_commerce.services.TokenService;
+import com.bulq.bulq_commerce.util.auth.CustomUserDetails;
 import com.bulq.bulq_commerce.util.constants.AccountError;
 import com.bulq.bulq_commerce.util.constants.AccountSuccess;
 import com.bulq.bulq_commerce.util.constants.EmaiLError;
@@ -85,14 +86,20 @@ public class AuthController {
 
     @PostMapping("/token")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<TokenDTO> token(@Valid @RequestBody UserLoginDTO userLogin) throws AuthenticationException{
+    public ResponseEntity<TokenDTO> token(@Valid @RequestBody UserLoginDTO userLogin) throws AuthenticationException {
         try {
             Authentication authentication = authenticationManager
-            .authenticate(new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword()));
-            return ResponseEntity.ok(new TokenDTO(tokenService.generateToken(authentication)));
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(userLogin.getEmail(), userLogin.getPassword()));
+            // Extract user details from authentication object
+            CustomUserDetails userDetails;
+            userDetails = (CustomUserDetails) authentication.getPrincipal(); // assuming is the principal class
+            String token = tokenService.generateToken(authentication);
+
+            return ResponseEntity.ok(new TokenDTO(token, userDetails.getFirstName(), userDetails.getAuthorities()));
         } catch (Exception e) {
-            log.debug(AccountError.TOKEN_GENERATION_ERROR.toString() + ": "+e.getMessage());
-            return new ResponseEntity<>(new TokenDTO(null), HttpStatus.BAD_REQUEST);
+            log.debug(AccountError.TOKEN_GENERATION_ERROR.toString() + ": " + e.getMessage());
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

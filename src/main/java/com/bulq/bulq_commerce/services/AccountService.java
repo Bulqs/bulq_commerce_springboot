@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.bulq.bulq_commerce.models.Account;
 import com.bulq.bulq_commerce.repositories.AccountRepository;
+import com.bulq.bulq_commerce.util.auth.CustomUserDetails;
 import com.bulq.bulq_commerce.util.constants.Authority;
 
 @Service
@@ -76,7 +77,8 @@ public class AccountService implements UserDetailsService {
         Account account = optionalAccount.get();
         List<GrantedAuthority> grantedAuthority = new ArrayList<>();
         grantedAuthority.add(new SimpleGrantedAuthority(account.getAuthorities()));
-        return new User(account.getEmail(), account.getPassword(), grantedAuthority);
+        // Return custom user details including first name and authorities
+        return new CustomUserDetails(account.getEmail(), account.getPassword(), account.getFirstName(), grantedAuthority);
     }
 
 }

@@ -31,6 +31,9 @@ import com.bulq.bulq_commerce.payload.order.AddItemPayloadDTO;
 import com.bulq.bulq_commerce.payload.order.AddOrderPayloadDTO;
 import com.bulq.bulq_commerce.payload.order.FilterOrderViewDT;
 import com.bulq.bulq_commerce.payload.order.ItemViewDTO;
+import com.bulq.bulq_commerce.payload.order.OrderBusinessSummaryAmountDTO;
+import com.bulq.bulq_commerce.payload.order.OrderSummaryAmountDTO;
+import com.bulq.bulq_commerce.payload.order.OrderSummaryDTO;
 import com.bulq.bulq_commerce.payload.order.OrderViewDTO;
 import com.bulq.bulq_commerce.payload.order.UpdateOrderPayloadDTO;
 import com.bulq.bulq_commerce.services.AccountService;
@@ -271,6 +274,55 @@ public class OrderController {
         orderService.save(updatedOrder);
         return ResponseEntity.ok("Order has been updated successfully");
 
+    }
+
+    @GetMapping("/summary")
+    @ApiResponse(responseCode = "200", description = "booking summary stats")
+    @ApiResponse(responseCode = "401", description = "Token missing")
+    @ApiResponse(responseCode = "403", description = "Token Error")
+    @Operation(summary = "get summary of bookings")
+    @SecurityRequirement(name = "bulq-demo-api")
+    public ResponseEntity<List<OrderSummaryDTO>> getOrderSummary(
+            @RequestParam(required = false) List<Status> statuses,
+            @RequestParam(required = false) Integer day,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) Integer year) {
+
+        List<OrderSummaryDTO> OrderSummary = orderService.getOrderSummary(statuses, day, month, year);
+        return new ResponseEntity<>(OrderSummary, HttpStatus.OK);
+    }
+
+    @GetMapping("/summary-amounts")
+    @ApiResponse(responseCode = "200", description = "booking summary with amount stats")
+    @ApiResponse(responseCode = "401", description = "Token missing")
+    @ApiResponse(responseCode = "403", description = "Token Error")
+    @Operation(summary = "get summary of bookings with amounts earned")
+    @SecurityRequirement(name = "bulq-demo-api")
+    public ResponseEntity<List<OrderSummaryAmountDTO>> getOrderSummaryWithAmount(
+            @RequestParam(required = false) List<Status> statuses,
+            @RequestParam(required = false) Integer day,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) Integer year) {
+
+        List<OrderSummaryAmountDTO> OrderSummary = orderService.getOrderSummaryWithAmount(statuses, day, month, year);
+        return new ResponseEntity<>(OrderSummary, HttpStatus.OK);
+    }
+
+    @GetMapping("/business-summary")
+    @ApiResponse(responseCode = "200", description = "booking summary with amount stats for a single business")
+    @ApiResponse(responseCode = "401", description = "Token missing")
+    @ApiResponse(responseCode = "403", description = "Token Error")
+    @Operation(summary = "get summary of bookings with amounts earned for a single business")
+    @SecurityRequirement(name = "bulq-demo-api")
+    public ResponseEntity<List<OrderBusinessSummaryAmountDTO>> getOrderSummary(
+            @RequestParam Long businessId,
+            @RequestParam(required = false) List<Status> statuses, // Accept a list of statuses
+            @RequestParam(required = false) Integer day,
+            @RequestParam(required = false) String month,
+            @RequestParam(required = false) Integer year) {
+        
+                List<OrderBusinessSummaryAmountDTO> summary = orderService.getOrderSummaryByBusinessId(businessId, statuses, day, month, year);
+                return ResponseEntity.ok(summary);
     }
 
 }

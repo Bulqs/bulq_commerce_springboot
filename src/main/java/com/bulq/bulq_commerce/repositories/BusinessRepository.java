@@ -1,7 +1,5 @@
 package com.bulq.bulq_commerce.repositories;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.bulq.bulq_commerce.models.Business;
-import com.bulq.bulq_commerce.util.constants.Status;
 
 public interface BusinessRepository extends JpaRepository<Business, Long> {
        @Query("SELECT b FROM Business b WHERE " +

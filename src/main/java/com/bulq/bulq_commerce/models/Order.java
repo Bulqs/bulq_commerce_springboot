@@ -2,6 +2,11 @@ package com.bulq.bulq_commerce.models;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import com.bulq.bulq_commerce.util.constants.DeliveryType;
 import com.bulq.bulq_commerce.util.constants.Status;
 
@@ -50,6 +55,18 @@ public class Order {
     private String address;
 
     private DeliveryType deliveryType;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String modifiedBy;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+    
+    @CreatedDate
+    private LocalDateTime createdDate;
 
     // Many to one relationship with user and account
     @ManyToOne

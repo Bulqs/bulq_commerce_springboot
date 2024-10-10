@@ -3,6 +3,11 @@ package com.bulq.bulq_commerce.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import com.bulq.bulq_commerce.util.constants.Status;
 import com.bulq.bulq_commerce.util.constants.TransactionType;
 
@@ -46,6 +51,18 @@ public class Transaction {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="wallet_id", referencedColumnName="id", nullable=true)
     private Wallet wallet;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String modifiedBy;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+    
+    @CreatedDate
+    private LocalDateTime createdDate;
 
     //one to one relationship with product
     @OneToOne

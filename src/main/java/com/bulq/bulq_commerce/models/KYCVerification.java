@@ -2,6 +2,11 @@ package com.bulq.bulq_commerce.models;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import com.bulq.bulq_commerce.util.constants.KYCType;
 import com.bulq.bulq_commerce.util.constants.VerifiedType;
 
@@ -36,6 +41,18 @@ public class KYCVerification {
     private String businessName;
 
     private LocalDateTime submissionDate;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String modifiedBy;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+    
+    @CreatedDate
+    private LocalDateTime createdDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "verified_type", columnDefinition = "enum('ISNINVERIFIED', 'ISBVNVERIFIED','ISFULLYVERIFIED') DEFAULT 'ISNINVERIFIED'")

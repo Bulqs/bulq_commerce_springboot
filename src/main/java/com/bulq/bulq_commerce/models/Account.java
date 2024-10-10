@@ -2,6 +2,11 @@ package com.bulq.bulq_commerce.models;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import com.bulq.bulq_commerce.util.constants.Verification;
 
 import jakarta.persistence.Column;
@@ -70,7 +75,23 @@ public class Account {
 
     // @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String modifiedBy;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+    
+    @CreatedDate
+    private LocalDateTime createdDate;
     
     @OneToOne(mappedBy = "account")
     private Business business;
+
+    // One-to-one relationship with Wallet (mapped by the 'account' field in Wallet)
+    @OneToOne(mappedBy = "account")
+    private Wallet wallet;
 }
